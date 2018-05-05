@@ -1,5 +1,6 @@
 // Import everything from express and assign it to the express variable
 import express = require('express');
+import db = require('./database/controllers');
 
 // Import WelcomeController from controllers entry point
 import {WelcomeController} from './controllers';
