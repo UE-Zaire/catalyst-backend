@@ -7,9 +7,3 @@ export const driver = drivers;
 
 drivers.onCompleted = () => {console.log('Driver created')};
 drivers.onError = (error) => {console.log('error', error)};
-
-  //addLinks(wikiLinks);
-  //traverseList();
-  //getShortestPath('Mind', '0');
-  //getAllPaths('Mind', '0')
-  //getSurroundings('0', 2)

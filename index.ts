@@ -1,20 +1,13 @@
-// Import everything from express and assign it to the express variable
-import express = require('express');
-import db = require('./database/controllers');
+import express from 'express';
+import { router } from './controllers';
+import bodyParser from 'body-parser';
 
-// Import WelcomeController from controllers entry point
-import {WelcomeController} from './controllers';
-
-// Create a new express application instance
 const app: express.Application = express();
-// The port the express app will listen on
 const port: number = (process.env.PORT !== undefined) ? parseInt(process.env.PORT): 3000;
 
-// Mount the WelcomeController at the /welcome route
-app.use('/welcome', WelcomeController);
+app.use(bodyParser.json());
+app.use('/', router);
 
-// Serve the application at the given port
 app.listen(port, () => {
-    // Success callback
     console.log(`Listening at http://localhost:${port}/`);
 });
