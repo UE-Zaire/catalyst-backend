@@ -16,8 +16,8 @@ router.post('/api/paths', async (req: Request, res: Response) => {
 });
 
 router.post('/api/surroundings', async (req: Request, res: Response) => {
-  const { source } = req.body;
-  const result = await getSurroundings(source);
+  const { source, distance } = req.body;
+  const result = await getSurroundings(source, distance);
   res.send(result);
 });
 
