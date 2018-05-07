@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getShortestPath, getAllPaths, getSurroundings } from './database/controllers';
+import { getShortestPath, getAllPaths, getSurroundings, getNodesList } from './database/controllers';
 
 const router: Router = Router();
 
@@ -20,6 +20,11 @@ router.post('/api/surroundings', async (req: Request, res: Response) => {
   const result = await getSurroundings(source);
   res.send(result);
 });
+
+router.get('/api/nodesList', (req: Request, res: Response) => {
+  const result = getNodesList();
+  res.send(result);
+})
 
 export {
   router
