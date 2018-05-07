@@ -81,10 +81,9 @@ const getSurroundings = (node: string, distance: number = 1) => {
 };
 
 const getNodesList = () => {
-  interface Nodes {[key: string]: boolean};
-  const nodes: Nodes = {};
+  const nodes: any = [];
   wikiList.split('\n').forEach(node => {
-    nodes[node] = true;
+    nodes.push({id: node, item: node});
   })
   return nodes;
 }
