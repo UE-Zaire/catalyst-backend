@@ -11,7 +11,7 @@ const getShortestPath = (fromNode: string, toNode: string) => {
       path.forEach((step: any) => {
         const start: any = step.start.properties.id;
         const end: any = step.end.properties.id;
-        if (start !== toNode) {
+        if (start !== toNode && start !== fromNode) {
           response.nodes.push({id: start, group: 1});
         }
         response.links.push({source: start, target: end, value: 1});
