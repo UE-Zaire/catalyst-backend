@@ -83,7 +83,7 @@ const getSurroundings = (node: string, distance: number = 1) => {
 const getNodesList = () => {
   const nodes: any = [];
   wikiList.split('\n').forEach(node => {
-    nodes.push({id: node, item: node});
+    nodes.push({id: node, label: node});
   })
   return nodes;
 }
