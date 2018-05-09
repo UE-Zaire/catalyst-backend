@@ -1,6 +1,6 @@
 import express from 'express';
 import { router } from './controllers';
-import bodyParser from 'body-parser';
+import bodyParser from 'body-parser'; 
 
 const app: express.Application = express();
 const port: number = (process.env.PORT !== undefined) ? parseInt(process.env.PORT): 3005;
