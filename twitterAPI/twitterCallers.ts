@@ -55,11 +55,11 @@ const getRetweetersById = (tweetId: string) => {
 const getTweetsByUser = (user: string, max_id: any = false) => {
   const params = max_id ? {screen_name: user, tweet_mode: 'extended', count: 200, max_id: max_id} :
   {screen_name: user, tweet_mode: 'extended', count: 200};
-  var lastId: string;
+
   twitter.get('statuses/user_timeline', params)
   .then((tweets: any) => {
-    console.log(tweets.length);
     tweets.forEach((tweet: any, i: number) => {
+
       const singleTweet: Tweet = {
         userId: tweet.user.id_str,
         userName: user,
@@ -71,9 +71,11 @@ const getTweetsByUser = (user: string, max_id: any = false) => {
         friends: tweet.user.friends_count,
         timeStamp: tweet.created_at,
       }
+
       if (i === tweets.length - 1 && tweets.length > 100) {
         getTweetsByUser(user, tweet.id_str);
       } 
+
     })
   })
   .catch((err: any) => {
@@ -81,9 +83,9 @@ const getTweetsByUser = (user: string, max_id: any = false) => {
   })
 }
 
-
 export {
   getStreamByTopic,
-  getTrendsByLocation
+  getTrendsByLocation,
+  getTweetsByUser
 }
 
