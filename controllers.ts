@@ -40,14 +40,16 @@ router.get('/api/nodesList', (req: Request, res: Response) => {
 });
 
 router.get('/api/embedding', (req: Request, res: Response) => {
-  const sampleData: number[] = [];
+  const sampleData: object[] = [];
 
-  fs.readFile(path.join(__dirname + './sampleData/embedding.csv'), 'utf8', (err, data) => {
+  fs.readFile(path.join(__dirname + '/sampleData/embedding.csv'), 'utf8', (err, data) => {
     if (err) { return console.error('error extracting sample data from csv', err); }
 
-    data.split(',').forEach((coord) => {
-      sampleData.push(parseFloat(coord));
-    });
+    const csvData = data.split(',');
+
+    for (let i = 0; i < csvData.length; i += 2) {
+      sampleData.push([parseFloat(csvData[i]), parseFloat(csvData[i + 1])]);
+    }
 
     res.send(sampleData);
   });
