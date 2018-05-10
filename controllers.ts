@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getShortestPath, getAllPaths, getSurroundings, getNodesList } from './database/controllers';
+import { getShortestPath, getAllPaths, getSurroundings, getNodesList } from './database/wikipediaPaths';
 
 const router: Router = Router();
 
