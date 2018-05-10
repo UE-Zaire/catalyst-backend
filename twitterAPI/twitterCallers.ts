@@ -1,15 +1,17 @@
 import twitter from './twitterCon';
+import fs from 'fs';
+import path from 'path';
 
 interface Tweet {
   userId: string,
-  user: string,
-  body: string,
+  userName: string,
   tweetId: string,
+  body: string,
+  favoritedCount: number,
+  location: string | null,
+  followers: number,
+  friends: number,
   timeStamp: string,
-  hashtags: string[],
-  retweeters: any,
-  likers: string[],
-  location: string | null
 }
 
 const getStreamByTopic = (topic: string = 'graphs') => {
@@ -28,39 +30,60 @@ const getTrendsByLocation = (id: number = 1) => {
   })
 }
 
+const getUserNamesFromId = (ids: string) => {
+  return twitter.post('users/lookup', {user_id: ids})
+  .then((users: any) => {
+    return users.map((user: any) => user.screen_name);
+  })
+  .catch((err: any) => {
+    console.log(err);
+  })
+}
+
 const getRetweetersById = (tweetId: string) => {
-  twitter.get('statuses/retweeters/ids', {id: tweetId}, (err: any, retweeter: any) => {
-    if (!err) {
-      console.log(retweeter);
-    } 
+  return twitter.get('statuses/retweeters/ids', {id: tweetId})
+  .then(async (retweeter: any) => {
+    const idList = retweeter.ids.join(','); 
+    const names = await getUserNamesFromId(idList);
+    return names;
+  })
+  .catch((err: any) => {
+    console.log(err);
   })
 }
 
-const getTweetsByUser = (user: string) => {
-  twitter.get('statuses/user_timeline', {screen_name: user, tweet_mode: 'extended', count: 10}, (err: any, tweets: any) => {
-    if (!err) {
-      tweets.forEach(async (tweet:any) => {
-        const retweeters = await getRetweetersById(tweet.id_str);
-
-        const singleTweet: Tweet = {
-          userId: tweet.user.id_str,
-          user: user,
-          body: tweet.full_text,
-          tweetId: tweet.id_str,
-          timeStamp: tweet.created_at,
-          hashtags: tweet.entities.hashtags,
-          retweeters: retweeters,
-          likers: [],
-          location: tweet.user.location,
-        }
-      })
-    }
+const getTweetsByUser = (user: string, max_id: any = false) => {
+  const params = max_id ? {screen_name: user, tweet_mode: 'extended', count: 200, max_id: max_id} :
+  {screen_name: user, tweet_mode: 'extended', count: 200};
+  var lastId: string;
+  twitter.get('statuses/user_timeline', params)
+  .then((tweets: any) => {
+    console.log(tweets.length);
+    tweets.forEach((tweet: any, i: number) => {
+      const singleTweet: Tweet = {
+        userId: tweet.user.id_str,
+        userName: user,
+        tweetId: tweet.id_str,
+        body: tweet.full_text,
+        favoritedCount: tweet.favorite_count,
+        location: tweet.user.location,
+        followers: tweet.user.followers_count,
+        friends: tweet.user.friends_count,
+        timeStamp: tweet.created_at,
+      }
+      if (i === tweets.length - 1 && tweets.length > 100) {
+        getTweetsByUser(user, tweet.id_str);
+      } 
+    })
+  })
+  .catch((err: any) => {
+    console.log(err);
   })
 }
 
-getTweetsByUser('Dan_Abramov');
 
 export {
   getStreamByTopic,
   getTrendsByLocation
 }
+
