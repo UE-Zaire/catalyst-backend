@@ -1,12 +1,8 @@
 import { Router, Request, Response } from 'express';
-<<<<<<< HEAD
 import { getShortestPath, getAllPaths, getSurroundings, getNodesList } from './database/neo4j/wikipediaPaths';
 import { getTweetsByUser } from './twitterAPI/twitterCallers';
-=======
-import { getShortestPath, getAllPaths, getSurroundings, getNodesList } from './database/wikipediaPaths';
 import * as fs from 'fs';
 import * as path from 'path';
->>>>>>> merge conflicts for controller imports managed
 
 const router: Router = Router();
 
