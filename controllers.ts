@@ -1,16 +1,18 @@
 import { Router, Request, Response } from 'express';
 import { getShortestPath, getAllPaths, getSurroundings, getNodesList } from './database/neo4j/wikipediaPaths';
-import { getTweetsByUser } from './twitterAPI/twitterCallers';
+import { getTweets } from './database/mySQL/twitterStorage';
+import { getUserFollowers } from './twitterAPI/twitterCallers';
 import * as fs from 'fs';
 import * as path from 'path';
 
 const router: Router = Router();
 
-router.post('/api/user', async (req, res) => {
+router.post('/api/twitterFollowers', async (req, res) => {
   const { username } = req.body;
-  const results = await getTweetsByUser(username);
+  const results = await getUserFollowers(username);
+  //console.log(results);
   res.send(results);
-})
+});
 
 router.post('/api/path', async (req: Request, res: Response) => {
   const { source, target } = req.body;
