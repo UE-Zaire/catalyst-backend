@@ -13,12 +13,9 @@ const router: Router = Router();
 router.get('/twitter/login',
   passport.authenticate('twitter'));
 
-router.get('/logged', 
-  passport.authenticate('twitter', { failureRedirect: '/api/surroundings', successRedirect: '/api/surroundings' }),
-  function(req, res) {
-    console.log('auth logged')
-    res.redirect('/');
-  });
+router.get('/logged', (req, res) => {
+  res.redirect('/');
+});
 
 //---------------------------------------------------------- TWITTER 
 
@@ -42,9 +39,9 @@ router.post('/api/paths', async (req: Request, res: Response) => {
   res.send(result);
 });
 
-router.post('/api/surroundings', async (req: Request, res: Response) => {
+router.post('/api/surroundings', async (req: any, res: Response) => {
   const { source, distance } = req.body;
-  const result = await getSurroundings(source, distance);
+  const result = await getSurroundings(source, distance); 
   res.send(result);
 });
 
@@ -57,9 +54,7 @@ router.get('/api/nodesList', (req: Request, res: Response) => {
 
 router.get('/api/embedding', (req: Request, res: Response) => {
   const sampleData: object[] = [];
-  console.log('embed')
   fs.readFile(path.join(__dirname + '/sampleData/embedding.csv'), 'utf8', (err, data) => {
-    if (err) { return console.error('error extracting sample data from csv', err); }
 
     const csvData = data.split(',');
 
