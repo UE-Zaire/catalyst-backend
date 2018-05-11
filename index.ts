@@ -19,15 +19,15 @@ app.use((req, res, next) => {
 passport.use(new Strategy({
   consumerKey: keys.consumer_key,
   consumerSecret: keys.consumer_secret,
-  callbackURL: "http://localhost/3005/logged"
+  callbackURL: "http://localhost:3005/logged"
 }, (token, tokenSecret, profile, done) => {
-  console.log('logged', token);
+  console.log('logged', token, tokenSecret, profile);
+  done(null, profile);
 }))
 app.use(session({ secret: 'cats', resave: true, saveUninitialized: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.use('/', router);
 
