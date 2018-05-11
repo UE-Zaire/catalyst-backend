@@ -32,10 +32,7 @@ const getTweetsByUser = (user: string, max_id?: any, since_id?: any) => {
   {screen_name: user, tweet_mode: 'extended', count: 200, since_id: since_id};
 
   twitter.get('statuses/user_timeline', params)
-  .then((tweets: any) => {
-    const allTweets: any = [];    
-    var lastTweet: number = 0;
-
+  .then((tweets: any) => {  
     tweets.forEach((tweet: any, i: number) => {
     if (i === 0 && !max_id) {
       const newUser: IUser = {
@@ -52,10 +49,10 @@ const getTweetsByUser = (user: string, max_id?: any, since_id?: any) => {
       }
       saveUser(newUser);
     }
-      var body = emojiStrip(tweet.full_text);
+
       const singleTweet: ITweet = {
         id: tweet.id,
-        body: body,
+        body: emojiStrip(tweet.full_text),
         favorite_count: tweet.favorite_count,
         user_name: user,
         user_id: tweet.user.id,
@@ -69,10 +66,8 @@ const getTweetsByUser = (user: string, max_id?: any, since_id?: any) => {
       if (tweets.length < 100) {
         updateLastTweet(user);
       }
+
     })
-  })
-  .catch((err: any) => {
-    console.log(err);
   })
 }
 
@@ -108,6 +103,10 @@ const getUserFollowers = (screen_name: string) => {
       return {source: screen_name, target: user.name, value: user.followers_count}
     })
     return { nodes, links };
+  })
+  .catch((err: any) => {
+    console.log(err);
+    return err;
   })
 }
 
